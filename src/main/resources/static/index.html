@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ComplaintBox</title>
+
+
+    <style>
+
+        /* =====================================================
+           BASIC
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #eef4f8;
+            color: #1e293b;
+        }
+
+
+        button {
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #102a43 0%,
+                    #163b59 55%,
+                    #0f304b 100%
+                );
+
+            color: white;
+
+            padding: 28px 18px;
+
+            z-index: 1000;
+
+            box-shadow:
+                5px 0 20px rgba(15,42,67,0.18);
+        }
+
+
+
+        /* LOGO */
+
+        .logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 0 10px;
+
+            margin-bottom: 45px;
+        }
+
+
+        .logo-icon {
+
+            width: 42px;
+            height: 42px;
+
+            border-radius: 12px;
+
+            background: #2cb1bc;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 22px;
+
+            box-shadow:
+                0 5px 15px
+                rgba(44,177,188,0.3);
+        }
+
+
+        .logo-text h2 {
+
+            font-size: 21px;
+
+            letter-spacing: 0.3px;
+        }
+
+
+        .logo-text p {
+
+            font-size: 11px;
+
+            color: #b8c9d8;
+
+            margin-top: 3px;
+        }
+
+
+
+        /* MENU */
+
+        .menu-label {
+
+            font-size: 11px;
+
+            color: #8fa8bd;
+
+            font-weight: bold;
+
+            padding: 0 12px;
+
+            margin-bottom: 12px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .role-btn {
+
+            width: 100%;
+
+            background: transparent;
+
+            color: #c7d5e2;
+
+            padding: 14px 15px;
+
+            margin-bottom: 7px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            text-align: left;
+
+            transition: all 0.25s ease;
+
+            border-radius: 10px;
+        }
+
+
+        .role-btn:hover {
+
+            background: rgba(255,255,255,0.09);
+
+            color: white;
+
+            transform: translateX(3px);
+        }
+
+
+        .role-icon {
+
+            width: 30px;
+
+            height: 30px;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 16px;
+        }
+
+
+        .active {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2cb1bc,
+                    #238fa3
+                ) !important;
+
+            color: white !important;
+
+            box-shadow:
+                0 6px 15px
+                rgba(44,177,188,0.28);
+
+            transform: translateX(3px);
+        }
+
+
+        .active .role-icon {
+
+            background: rgba(255,255,255,0.18);
+        }
+
+
+
+        /* SIDEBAR BOTTOM */
+
+        .sidebar-bottom {
+
+            position: absolute;
+
+            bottom: 25px;
+
+            left: 25px;
+            right: 25px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid rgba(255,255,255,0.1);
+
+            font-size: 12px;
+
+            color: #9db2c4;
+        }
+
+
+        .online-dot {
+
+            display: inline-block;
+
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #48bb78;
+
+            margin-right: 7px;
+        }
+
+
+
+        /* =====================================================
+           MAIN AREA
+        ===================================================== */
+
+        .main {
+
+            margin-left: 240px;
+
+            min-height: 100vh;
+        }
+
+
+
+        /* =====================================================
+           TOP HEADER
+        ===================================================== */
+
+        .topbar {
+
+            height: 110px;
+
+            background: white;
+
+            padding: 25px 40px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            border-bottom:
+                1px solid #e2e8f0;
+        }
+
+
+        .top-title h1 {
+
+            color: #102a43;
+
+            font-size: 28px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .top-title p {
+
+            color: #718096;
+
+            font-size: 14px;
+        }
+
+
+        .role-display {
+
+            background: #edf7f8;
+
+            color: #16727c;
+
+            padding: 10px 17px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            border:
+                1px solid #c7e9ec;
+        }
+
+
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
+
+        .content {
+
+            padding: 35px 40px;
+
+            max-width: 1400px;
+        }
+
+
+
+        /* MESSAGE */
+
+        .message {
+
+            padding: 13px 16px;
+
+            border-radius: 9px;
+
+            margin-bottom: 20px;
+
+            display: none;
+
+            font-size: 14px;
+
+            font-weight: 500;
+        }
+
+
+        .success {
+
+            background: #dcfce7;
+
+            color: #166534;
+
+            border-left:
+                4px solid #22c55e;
+        }
+
+
+        .error {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            border-left:
+                4px solid #ef4444;
+        }
+
+
+
+        /* =====================================================
+           DASHBOARD
+        ===================================================== */
+
+        .dashboard {
+
+            display: none;
+        }
+
+
+        .dashboard.show {
+
+            display: block;
+
+            animation:
+                fadeIn 0.25s ease;
+        }
+
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+
+
+        /* =====================================================
+           WELCOME BANNER
+        ===================================================== */
+
+        .welcome-banner {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d6682,
+                    #2cb1bc
+                );
+
+            color: white;
+
+            border-radius: 16px;
+
+            padding: 25px 28px;
+
+            margin-bottom: 25px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 25px
+                rgba(44,177,188,0.18);
+        }
+
+
+        .welcome-banner::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            right: -50px;
+            top: -70px;
+        }
+
+
+        .welcome-banner h2 {
+
+            font-size: 22px;
+
+            margin-bottom: 7px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .welcome-banner p {
+
+            font-size: 13px;
+
+            color: #e6ffff;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+
+        /* =====================================================
+           CARDS
+        ===================================================== */
+
+        .card {
+
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 15px;
+
+            margin-bottom: 25px;
+
+            border:
+                1px solid #e5edf3;
+
+            box-shadow:
+                0 5px 20px
+                rgba(30,60,90,0.07);
+        }
+
+
+        .card:hover {
+
+            box-shadow:
+                0 8px 25px
+                rgba(30,60,90,0.09);
+        }
+
+
+        .card h2 {
+
+            color: #102a43;
+
+            font-size: 22px;
+
+            margin-bottom: 22px;
+        }
+
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-group {
+
+            margin-bottom: 17px;
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #334e68;
+        }
+
+
+        input,
+        textarea,
+        select {
+
+            width: 100%;
+
+            padding: 12px 13px;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            color: #243b53;
+
+            background: #fbfdff;
+
+            transition:
+                border 0.2s,
+                box-shadow 0.2s;
+        }
+
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+
+            outline: none;
+
+            border-color: #2cb1bc;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(44,177,188,0.12);
+
+            background: white;
+        }
+
+
+        textarea {
+
+            min-height: 115px;
+
+            resize: vertical;
+        }
+
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .primary-btn {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2f855a,
+                    #38a169
+                );
+
+            color: white;
+
+            padding: 11px 19px;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 4px 10px
+                rgba(47,133,90,0.18);
+        }
+
+
+        .primary-btn:hover {
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 6px 14px
+                rgba(47,133,90,0.25);
+        }
+
+
+        .blue-btn {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2b6cb0,
+                    #3182ce
+                );
+
+            color: white;
+
+            padding: 11px 19px;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 4px 10px
+                rgba(43,108,176,0.18);
+        }
+
+
+        .blue-btn:hover {
+
+            transform: translateY(-1px);
+        }
+
+
+        .danger-btn {
+
+            background: #c53030;
+
+            color: white;
+        }
+
+
+
+        /* =====================================================
+           COMPLAINT
+        ===================================================== */
+
+        .complaint {
+
+            background: #fbfdff;
+
+            border:
+                1px solid #dce6ee;
+
+            border-radius: 11px;
+
+            padding: 20px;
+
+            margin-bottom: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .complaint:hover {
+
+            border-color: #a9dce1;
+
+            box-shadow:
+                0 5px 15px
+                rgba(30,60,90,0.06);
+        }
+
+
+        .complaint h3 {
+
+            color: #102a43;
+
+            margin-bottom: 12px;
+
+            font-size: 17px;
+        }
+
+
+        .complaint p {
+
+            margin: 8px 0;
+
+            font-size: 14px;
+
+            color: #475569;
+        }
+
+
+        .complaint strong {
+
+            color: #243b53;
+        }
+
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 5px 11px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            margin-left: 4px;
+        }
+
+
+        .OPEN {
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+        }
+
+
+        .IN_PROGRESS {
+
+            background: #fef3c7;
+
+            color: #a16207;
+        }
+
+
+        .RESOLVED {
+
+            background: #dcfce7;
+
+            color: #15803d;
+        }
+
+
+        .overdue {
+
+            color: #dc2626 !important;
+
+            font-weight: bold;
+
+            background: #fff1f2;
+
+            padding: 7px 10px;
+
+            border-radius: 6px;
+        }
+
+
+
+        /* =====================================================
+           WARDEN STATISTICS
+        ===================================================== */
+
+        .grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .stat {
+
+            background: white;
+
+            padding: 23px;
+
+            border-radius: 14px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            border:
+                1px solid #e5edf3;
+
+            box-shadow:
+                0 5px 18px
+                rgba(30,60,90,0.06);
+        }
+
+
+        .stat::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 5px;
+            height: 100%;
+
+            background: #2cb1bc;
+        }
+
+
+        .stat h3 {
+
+            font-size: 32px;
+
+            color: #102a43;
+
+            margin-bottom: 5px;
+        }
+
+
+        .stat p {
+
+            color: #718096;
+
+            font-size: 13px;
+        }
+
+
+
+        /* =====================================================
+           ACTION ROW
+        ===================================================== */
+
+        .action-row {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 16px;
+
+            flex-wrap: wrap;
+        }
+
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+
+                position: static;
+
+                width: 100%;
+
+                height: auto;
+
+                padding: 18px;
+
+            }
+
+
+            .logo {
+
+                margin-bottom: 18px;
+            }
+
+
+            .sidebar-bottom {
+
+                display: none;
+            }
+
+
+            .role-btn {
+
+                display: inline-flex;
+
+                width: auto;
+
+                margin-right: 5px;
+
+                margin-bottom: 5px;
+            }
+
+
+            .menu-label {
+
+                display: none;
+            }
+
+
+            .main {
+
+                margin-left: 0;
+            }
+
+
+            .topbar {
+
+                height: auto;
+
+                padding: 20px;
+
+            }
+
+
+            .top-title h1 {
+
+                font-size: 23px;
+            }
+
+
+            .content {
+
+                padding: 20px;
+            }
+
+
+            .grid {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<div class="sidebar">
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🛠
+        </div>
+
+        <div class="logo-text">
+
+            <h2>
+                ComplaintBox
+            </h2>
+
+            <p>
+                Hostel Maintenance
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div class="menu-label">
+        MAIN MENU
+    </div>
+
+
+    <button
+            class="role-btn active"
+            onclick="showDashboard('resident', this)"
+    >
+
+        <span class="role-icon">
+            👤
+        </span>
+
+        <span>
+            Resident
+        </span>
+
+    </button>
+
+
+    <button
+            class="role-btn"
+            onclick="showDashboard('staff', this)"
+    >
+
+        <span class="role-icon">
+            🛠
+        </span>
+
+        <span>
+            Staff
+        </span>
+
+    </button>
+
+
+    <button
+            class="role-btn"
+            onclick="showDashboard('warden', this)"
+    >
+
+        <span class="role-icon">
+            🏠
+        </span>
+
+        <span>
+            Warden
+        </span>
+
+    </button>
+
+
+    <!-- BOTTOM -->
+
+    <div class="sidebar-bottom">
+
+        <span class="online-dot"></span>
+
+        System Online
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="main">
+
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="top-title">
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <p>
+                Manage hostel maintenance complaints
+                efficiently
+            </p>
+
+        </div>
+
+
+        <div
+                id="currentRole"
+                class="role-display"
+        >
+
+            Resident
+
+        </div>
+
+    </header>
+
+
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+
+        <!-- MESSAGE -->
+
+        <div
+                id="message"
+                class="message"
+        >
+        </div>
+
+
+
+        <!-- =================================================
+             RESIDENT
+        ================================================= -->
+
+        <div
+                id="resident"
+                class="dashboard show"
+        >
+
+
+            <!-- WELCOME -->
+
+            <div class="welcome-banner">
+
+                <h2>
+                    Welcome, Resident 👋
+                </h2>
+
+                <p>
+                    Raise your hostel maintenance
+                    complaint and track its status.
+                </p>
+
+            </div>
+
+
+
+            <!-- RAISE COMPLAINT -->
+
+            <div class="card">
+
+
+                <h2>
+                    Raise a Complaint
+                </h2>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Resident ID
+                    </label>
+
+                    <input
+                            type="number"
+                            id="residentId"
+                            value="1"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select id="categoryId">
+
+                        <option value="1">
+                            Plumbing
+                        </option>
+
+                        <option value="2">
+                            Electrical
+                        </option>
+
+                        <option value="3">
+                            Cleaning
+                        </option>
+
+                        <option value="4">
+                            Furniture
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Room Number
+                    </label>
+
+                    <input
+                            type="text"
+                            id="roomNumber"
+                            placeholder="Example: A104"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                            id="description"
+                            placeholder="Describe your problem"
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                        class="primary-btn"
+                        onclick="createComplaint()"
+                >
+
+                    Submit Complaint
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- MY COMPLAINTS -->
+
+            <div class="card">
+
+
+                <h2>
+                    My Complaints
+                </h2>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Resident ID
+                    </label>
+
+                    <input
+                            type="number"
+                            id="viewResidentId"
+                            value="1"
+                    >
+
+                </div>
+
+
+                <button
+                        class="blue-btn"
+                        onclick="loadResidentComplaints()"
+                >
+
+                    View My Complaints
+
+                </button>
+
+
+                <div
+                        id="residentComplaints"
+                        style="margin-top:20px;"
+                >
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             STAFF
+        ================================================= -->
+
+        <div
+                id="staff"
+                class="dashboard"
+        >
+
+
+            <div class="welcome-banner">
+
+                <h2>
+                    Staff Dashboard 🛠
+                </h2>
+
+                <p>
+                    Manage and update hostel
+                    maintenance complaints.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+
+                <h2>
+                    Complaint Management
+                </h2>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Staff ID
+                    </label>
+
+                    <input
+                            type="number"
+                            id="staffId"
+                            value="1"
+                    >
+
+                </div>
+
+
+                <button
+                        class="blue-btn"
+                        onclick="loadAllComplaints()"
+                >
+
+                    View Complaints
+
+                </button>
+
+
+                <div
+                        id="staffComplaints"
+                        style="margin-top:20px;"
+                >
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             WARDEN
+        ================================================= -->
+
+        <div
+                id="warden"
+                class="dashboard"
+        >
+
+
+            <div class="welcome-banner">
+
+                <h2>
+                    Warden Dashboard 🏠
+                </h2>
+
+                <p>
+                    Monitor hostel complaints
+                    and their current status.
+                </p>
+
+            </div>
+
+
+
+            <!-- STATISTICS -->
+
+            <div class="grid">
+
+
+                <div class="stat">
+
+                    <h3 id="totalCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Complaints
+                    </p>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <h3 id="openCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Open Complaints
+                    </p>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <h3 id="resolvedCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Resolved Complaints
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- COMPLAINT VIEW -->
+
+            <div class="card">
+
+
+                <h2>
+                    Warden Complaint View
+                </h2>
+
+
+                <button
+                        class="blue-btn"
+                        onclick="loadWardenComplaints()"
+                >
+
+                    Load Complaints
+
+                </button>
+
+
+                <div
+                        id="wardenComplaints"
+                        style="margin-top:20px;"
+                >
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const API =
+        "http://localhost:8081/complaints";
+
+
+
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
+
+    function showMessage(text, type) {
+
+        const message =
+            document.getElementById("message");
+
+
+        message.innerText =
+            text;
+
+
+        message.className =
+            "message " + type;
+
+
+        message.style.display =
+            "block";
+
+
+        setTimeout(() => {
+
+            message.style.display =
+                "none";
+
+        }, 4000);
+
+    }
+
+
+
+    /* =====================================================
+       DASHBOARD
+    ===================================================== */
+
+    function showDashboard(role, button) {
+
+
+        document
+            .querySelectorAll(".dashboard")
+            .forEach(d => {
+
+                d.classList.remove("show");
+
+            });
+
+
+        document
+            .getElementById(role)
+            .classList.add("show");
+
+
+        document
+            .querySelectorAll(".role-btn")
+            .forEach(b => {
+
+                b.classList.remove("active");
+
+            });
+
+
+        button.classList.add("active");
+
+
+        document
+            .getElementById("currentRole")
+            .innerText =
+                role.charAt(0).toUpperCase()
+                + role.slice(1);
+
+    }
+
+
+
+    /* =====================================================
+       CREATE COMPLAINT
+    ===================================================== */
+
+    async function createComplaint() {
+
+
+        const residentId =
+            Number(
+                document
+                    .getElementById("residentId")
+                    .value
+            );
+
+
+        const categoryId =
+            Number(
+                document
+                    .getElementById("categoryId")
+                    .value
+            );
+
+
+        const roomNumber =
+            document
+                .getElementById("roomNumber")
+                .value;
+
+
+        const description =
+            document
+                .getElementById("description")
+                .value;
+
+
+        if (!roomNumber || !description) {
+
+            showMessage(
+                "Please fill all fields",
+                "error"
+            );
+
+            return;
+        }
+
+
+        const complaint = {
+
+            resident: {
+                id: residentId
+            },
+
+            category: {
+                id: categoryId
+            },
+
+            roomNumber:
+                roomNumber,
+
+            description:
+                description
+
+        };
+
+
+        try {
+
+
+            const response =
+                await fetch(API, {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            complaint
+                        )
+
+                });
+
+
+            if (!response.ok) {
+
+                const error =
+                    await response.json();
+
+                throw new Error(
+                    error.message
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            showMessage(
+                "Complaint created successfully! ID: "
+                + data.id,
+                "success"
+            );
+
+
+            document
+                .getElementById("roomNumber")
+                .value = "";
+
+
+            document
+                .getElementById("description")
+                .value = "";
+
+
+        }
+
+        catch (error) {
+
+            showMessage(
+                error.message ||
+                "Something went wrong",
+                "error"
+            );
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       RESIDENT COMPLAINTS
+    ===================================================== */
+
+    async function loadResidentComplaints() {
+
+
+        const residentId =
+            document
+                .getElementById(
+                    "viewResidentId"
+                )
+                .value;
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    API +
+                    "/resident/" +
+                    residentId
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load complaints"
+                );
+
+            }
+
+
+            const complaints =
+                await response.json();
+
+
+            displayComplaints(
+                complaints,
+                "residentComplaints",
+                false
+            );
+
+
+        }
+
+        catch (error) {
+
+            showMessage(
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       ALL COMPLAINTS
+    ===================================================== */
+
+    async function loadAllComplaints() {
+
+
+        try {
+
+
+            const response =
+                await fetch(API);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load complaints"
+                );
+
+            }
+
+
+            const complaints =
+                await response.json();
+
+
+            displayComplaints(
+                complaints,
+                "staffComplaints",
+                true
+            );
+
+
+        }
+
+        catch (error) {
+
+            showMessage(
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       WARDEN
+    ===================================================== */
+
+    async function loadWardenComplaints() {
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    API + "/warden"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load complaints"
+                );
+
+            }
+
+
+            const complaints =
+                await response.json();
+
+
+            document
+                .getElementById("totalCount")
+                .innerText =
+                    complaints.length;
+
+
+            document
+                .getElementById("openCount")
+                .innerText =
+                    complaints.filter(
+                        c =>
+                            c.status === "OPEN"
+                    ).length;
+
+
+            document
+                .getElementById("resolvedCount")
+                .innerText =
+                    complaints.filter(
+                        c =>
+                            c.status === "RESOLVED"
+                    ).length;
+
+
+            displayComplaints(
+                complaints,
+                "wardenComplaints",
+                true
+            );
+
+
+        }
+
+        catch (error) {
+
+            showMessage(
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       DISPLAY COMPLAINTS
+    ===================================================== */
+
+    function displayComplaints(
+        complaints,
+        elementId,
+        showActions
+    ) {
+
+
+        const container =
+            document.getElementById(
+                elementId
+            );
+
+
+        if (complaints.length === 0) {
+
+            container.innerHTML =
+                "<p>No complaints found.</p>";
+
+            return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        complaints.forEach(c => {
+
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "complaint";
+
+
+            let overdueText = "";
+
+
+            if (c.overdue === true) {
+
+                overdueText =
+                    '<p class="overdue">⚠ OVERDUE</p>';
+
+            }
+
+
+            let actionButtons = "";
+
+
+            if (
+                showActions &&
+                c.status !== "RESOLVED"
+            ) {
+
+
+                actionButtons = `
+
+                    <div class="action-row">
+
+                        ${
+                            c.status === "OPEN"
+                            ?
+                            `<button
+                                class="blue-btn"
+                                onclick="updateStatus(
+                                    ${c.id},
+                                    'IN_PROGRESS',
+                                    1
+                                )">
+
+                                Start Progress
+
+                            </button>`
+                            :
+                            ""
+                        }
+
+
+                        ${
+                            c.status === "IN_PROGRESS"
+                            ?
+                            `<button
+                                class="primary-btn"
+                                onclick="updateStatus(
+                                    ${c.id},
+                                    'RESOLVED',
+                                    1
+                                )">
+
+                                Resolve
+
+                            </button>`
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                `;
+
+            }
+
+
+            div.innerHTML = `
+
+                <h3>
+                    Complaint #${c.id}
+                </h3>
+
+
+                <p>
+
+                    <strong>
+                        Resident:
+                    </strong>
+
+                    ${c.resident?.name || "N/A"}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Room:
+                    </strong>
+
+                    ${c.roomNumber}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Category:
+                    </strong>
+
+                    ${c.category?.name || "N/A"}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Description:
+                    </strong>
+
+                    ${c.description}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Status:
+                    </strong>
+
+                    <span
+                        class="status ${c.status}"
+                    >
+                        ${c.status}
+                    </span>
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Remark:
+                    </strong>
+
+                    ${c.remark || "No remark"}
+
+                </p>
+
+
+                ${overdueText}
+
+
+                ${actionButtons}
+
+            `;
+
+
+            container.appendChild(div);
+
+        });
+
+    }
+
+
+
+    /* =====================================================
+       UPDATE STATUS
+    ===================================================== */
+
+    async function updateStatus(
+        complaintId,
+        newStatus,
+        staffId
+    ) {
+
+
+        const remark =
+            prompt("Enter remark:");
+
+
+        if (remark === null) {
+
+            return;
+
+        }
+
+
+        try {
+
+
+            const response =
+                await fetch(
+
+                    API +
+                    "/" +
+                    complaintId +
+                    "?staffId=" +
+                    staffId,
+
+                    {
+
+                        method: "PUT",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                status:
+                                    newStatus,
+
+                                remark:
+                                    remark
+
+                            })
+
+                    }
+
+                );
+
+
+            if (!response.ok) {
+
+                const error =
+                    await response.json();
+
+                throw new Error(
+                    error.message
+                );
+
+            }
+
+
+            showMessage(
+                "Complaint updated successfully",
+                "success"
+            );
+
+
+            loadAllComplaints();
+
+
+        }
+
+        catch (error) {
+
+            showMessage(
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+</script>
+
+</body>
+</html>
